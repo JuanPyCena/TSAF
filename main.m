@@ -269,3 +269,115 @@ pressure2_b(ap2(1)) = (pressure2_b(ap2(1)+1)+pressure2_b(ap2(1)-1))/2;
 % Windgeschwindigkeit
 wind2_b = wind2;
 wind2_b(aw2) = (wind2_b(aw2+1)+wind2_b(aw2-1))/2;
+
+%% 9.4.2018_________________________________________________________ Julia
+% Interpolieren über das datenleck3 (4 Messdaten fehlen)
+x   = [1 , (datenleck3_end - datenleck3_begin) + 1];
+xq  = [2; 3; 4; 5];                                       
+
+%Temperatur
+v               = [temp3_b(end), temp4(1)];
+temp3_ip        = interp1(x,v,xq,'spline');
+dataFFT.temp1       = temp1_b;
+dataFFT.temp2       = temp2_b;
+dataFFT.temp3       = [temp3_b temp3_ip' temp4];
+
+%Luftdruck
+v               = [pressure3(end), pressure4(1)];
+pressure3_ip    = interp1(x,v,xq,'spline');
+dataFFT.pressure1   = pressure1;
+dataFFT.pressure2   = pressure2_b;
+dataFFT.pressure3   = [pressure3 pressure3_ip' pressure4];
+
+%Luftfeuchte
+v               = [humidity3(end), humidity4(1)];
+humidity3_ip    = interp1(x,v,xq,'spline');
+dataFFT.humidity1   = humidity1;
+dataFFT.humidity2   = humidity2;
+dataFFT.humidity3   = [humidity3 humidity3_ip' humidity4];
+
+%Windgeschwindigkeit
+v               = [humidity3(end), humidity4(1)];
+wind3_ip        = interp1(x,v,xq,'spline');
+dataFFT.wind1       = wind1;
+dataFFT.wind2       = wind2_b;
+dataFFT.wind3       = [wind3 wind3_ip' wind4];
+
+%dataFFT beinhaltet nun alle Daten zur weiteren Fouriertransformation
+
+%% Fourier Transformation
+
+%Fourier-transformieren
+[dft, magn, phase] = f_doFFT(dataFFT);
+
+%Plots
+
+%temp1
+figure
+hold on
+subplot(3,1,1)
+plot(dataFFT.wind1)
+title('Time Series')
+subplot(3,1,2)
+plot(magn.wind1)
+xlabel('bins')
+ylabel('Magnitude')
+title('Magnitude')
+subplot(3,1,3)
+plot(phase.wind1)
+title('Phase')
+hold off
+
+% temp2
+figure
+hold on
+subplot(3,1,1)
+plot(dataFFT.wind2)
+title('Time Series')
+subplot(3,1,2)
+plot(magn.wind2)
+xlabel('bins')
+ylabel('Magnitude')
+title('Magnitude')
+subplot(3,1,3)
+plot(phase.wind2)
+title('Phase')
+hold off
+
+% temp3
+figure
+hold on
+subplot(3,1,1)
+plot(dataFFT.wind3)
+title('Time Series')
+subplot(3,1,2)
+plot(magn.wind3)
+xlabel('bins')
+ylabel('Magnitude')
+title('Magnitude')
+subplot(3,1,3)
+plot(phase.wind3)
+title('Phase')
+hold off
+
+%% Magnitudenspektrum
+
+% temp3
+figure
+hold on
+subplot(3,1,1)
+plot(magn.wind1)
+title('Magnitude temp1')
+subplot(3,1,2)
+plot(magn.wind2)
+xlabel('bins')
+ylabel('Magnitude')
+title('Magnitude temp2')
+subplot(3,1,3)
+plot(magn.wind3)
+title('Magnitude temp3')
+hold off
+
+
+
+
