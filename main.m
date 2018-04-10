@@ -4,8 +4,12 @@ clc;
 
 DATA = importdata('passow_2017_DataLevel1.asc');
 text_data = DATA.textdata;
-% DATA_2 = importdata('sassen_2017_DataLevel1.asc');
-% text_data_sassen = DATA_2.textdata;
+DATA_z1 = importdata('zarrenthin_2017_DataLevel1_FILE1.asc.csv',';');
+text_data_zarr1 = DATA_z1.textdata;
+DATA_z2 = importdata('zarrenthin_2017_DataLevel1_FILE2.asc.csv',';');
+text_data_zarr2 = DATA_z2.textdata;
+DATA_z3 = importdata('zarrenthin_2017_DataLevel1_FILE3.asc.csv',';');
+text_data_zarr3 = DATA_3.textdata;
 
 % Bereiche ohne Messdaten Passau
 datenleck1_begin = 9498;
